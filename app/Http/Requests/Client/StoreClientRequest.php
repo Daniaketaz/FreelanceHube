@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Client;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateClientRequest extends FormRequest
+class StoreClientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,12 +23,11 @@ class CreateClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'=>['string','exists:users,id'],
-            'name'=>['string','max:25','min:1'],
-            'email'=>['string'],
-            'company'=>['string','nullable'],
-            'phone'=>['string','max:15'],
-            'note'=>['string','nullable']
+            'name' => ['required','string','max:255'],
+            'email' => ['nullable','email'],
+            'phone' => ['nullable','string','max:30'],
+            'company' => ['nullable','string','max:255'],
+            'notes' => ['nullable','string'],
         ];
     }
 }

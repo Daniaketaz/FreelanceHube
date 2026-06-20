@@ -12,10 +12,23 @@ class ClientRepository{
         return $this->model->create($array);
     }
 
-    public function find(string $id){
-        return $this->model->find('id',$id)->first();
+    public function update(Client $client,array $data): bool
+    {
+        return $client->update($data);
     }
-    public function update(array $array){
-        return $this->model->update($array);
+
+    public function delete(Client $client): bool
+    {
+        return $client->delete();
+    }
+
+    public function findById(int $id,  int $userId): Client
+    {
+        return Client::whereKey($id)
+            ->where('user_id', $userId)
+            ->firstOrFail();
+    }
+    public function getAll(int $userId) {
+        return $this->model->where('user_id',$userId)->latest()->paginate();
     }
 }

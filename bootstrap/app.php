@@ -5,6 +5,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use App\Exceptions\ApiException;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,5 +22,18 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+
+        $exceptions->render(function (
+            ApiException $e,
+            $request
+        ) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'error_code' => $e->getErrorCode(),
+            ], $e->getStatusCode());
+
+
+        });
     })->create();
